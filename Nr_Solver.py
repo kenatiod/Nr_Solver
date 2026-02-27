@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Nr_Solver.py version 16
+# Nr_Solver.py version 17
 """
 Lehmer-Størmer enumerator by PARI Pell equation solver
 
@@ -81,6 +81,16 @@ Version 10 changes (Feb 20 2026)
   masks_skipped_gp_bailout, iterates_early_break
 * Handshake self-test now verifies both solution correctness and bailout behavior
 
+
+Version 17 changes (Feb 27 2026)
+---------------------------------
+* Corrected iterate bound: L = max(3, pmax) instead of max(3, (pmax+1)//2).
+  The Størmer-Lehmer theorem (via the primitive divisor theorem of
+  Bilu-Hanrot-Voutier 2001) guarantees that for the Pell sequence
+  x_n^2 - 2q*y_n^2 = 1, if m = (x_n - 1)/2 is P-smooth then n <= pmax.
+  The prior half-pmax bound was conservative in the wrong direction —
+  it was too small to guarantee completeness. This fix closes the gap
+  between the computational search and a formally complete enumeration.
 
 By Ken Clements, Feb 16 2026
 """
@@ -779,7 +789,7 @@ def compute_S_pmax_exact(
     P = tuple(primes)
     omega = len(P)
     pmax = P[-1]
-    L = max(3, (pmax + 1) // 2)
+    L = max(3, pmax)
     nze_enabled = (nze_pruning > 0 and omega >= nze_pruning)
 
     total_masks = 1 << omega
@@ -979,7 +989,7 @@ def compute_and_verify_lightweight(
     P = tuple(primes)
     omega = len(P)
     pmax = P[-1]
-    L = max(3, (pmax + 1) // 2)
+    L = max(3, pmax)
     nze_enabled = (nze_pruning > 0 and omega >= nze_pruning)
 
     total_masks = 1 << omega
@@ -1456,7 +1466,7 @@ def main() -> None:
 
         primes = primes_first_n(omega)
         pmax = primes[-1]
-        L = max(3, (pmax + 1) // 2)
+        L = max(3, pmax)
 
         s_path = os.path.join(d, f"S_p{pmax}_r{r}_omega_{omega:02d}.txt")
         v_path = os.path.join(d, f"verify_r{r}_omega_{omega:02d}.csv")
