@@ -5,7 +5,7 @@ Lehmer-Størmer enumerator by PARI Pell equation solver
 
 Purpose
 -------
-Enumerate and verify candidates for π-complete products of consecutive integers
+Enumerate and verify candidates for prime-complete products of consecutive integers
 
     N_r(m) = m (m+1) ... (m+r-1)
 
@@ -24,7 +24,7 @@ powers of (x1 + y1*sqrt(D)). Each solution yields a candidate
 
     m = (x - 1)/2,
 
-which we then filter for smoothness and finally certify π-completeness by
+which we then filter for smoothness and finally certify prime-completeness by
 factorization and exact prime-support comparison.
 
 Implementation notes
@@ -38,7 +38,7 @@ Implementation notes
   retained.
 * Audit trail: for each (r, ω) run we write:
     - S-file of candidate m values
-    - verification CSV (factorizations + π-complete hit flag)
+    - verification CSV (factorizations + prime-complete hit flag)
     - run log (progress + parameters)
     - summary JSON (hashes + environment + completeness indicators)
 
@@ -297,7 +297,7 @@ def factor_over_P(n: int, primes: Tuple[int, ...]) -> Tuple[Dict[int, int], int]
 # holds. Python then iterates powers of the fundamental solution using the standard recurrence
 #   (x',y') = (x1*x + D*y1*y,  x1*y + y1*x),
 # which preserves x^2 - D*y^2 = 1 exactly. Each iterate yields a candidate m = (x-1)/2 (when x is odd), which is then
-# filtered for P-smoothness (and later checked for π-completeness by exact factorization and prime-support equality).
+# filtered for P-smoothness (and later checked for prime-completeness by exact factorization and prime-support equality).
 # The separation is deliberate: GP supplies certified Pell arithmetic; Python enforces predicates and produces the
 # reproducible audit trail (logs + hashes + environment/version metadata).
 
@@ -519,7 +519,7 @@ def _pell_xy_gp(D: int, retries: int = 2, gp_timeout: float = 0.0,
 # Each bitmask encodes a squarefree subset of the current prime set P = (p1,...,p_omega): bit i is 1 iff p_i is
 # included, and the mask maps to q = ∏ p_i. For each q we form the Pell parameter D = 2q and compute the minimal
 # solution (x1,y1) to x^2 − D y^2 = 1; iterating that fundamental unit yields candidate m = (x−1)/2 values, which
-# are then filtered for P-smoothness (and later π-completeness). Chunking masks amortizes gp startup/IPC overhead,
+# are then filtered for P-smoothness (and later prime-completeness). Chunking masks amortizes gp startup/IPC overhead,
 # enables dynamic work distribution across CPU cores, and provides a natural unit for retry/requeue when a small
 # subset of masks is unusually expensive (“stragglers”) or temporarily fails.
 
@@ -683,7 +683,7 @@ def worker_chunk(args: Tuple[ChunkTask, WorkerParams]) -> ChunkResult:
                             if not nze_enabled:
                                 out.add(m)
                             else:
-                                # NZE pruning: require full prime coverage (π-complete support)
+                                # NZE pruning: require full prime coverage (prime-complete support)
                                 fNr: Dict[int, int] = {}
                                 ok_cov = True
                                 for j in range(r):
@@ -808,7 +808,7 @@ def compute_S_pmax_exact(
 
     if incremental and prior_S is not None and omega >= 2:
         # When NZE pruning is enabled, we must not seed the current ω run with the
-        # previous ω candidate list; those prior candidates may be non-π-complete
+        # previous ω candidate list; those prior candidates may be non-prime-complete
         # for the larger prime set and would contaminate counts (and debugging).
         if not nze_enabled:
             base_set = set(prior_S)
@@ -1076,7 +1076,7 @@ def compute_and_verify_lightweight(
         # If NZE pruning is enabled in the worker, every emitted m already:
         #  (i) is P-smooth across all r multipliers, and
         # (ii) has full prime support P (no missing primes).
-        # So each m is a π-complete hit and we can update statistics without refactoring.
+        # So each m is a prime-complete hit and we can update statistics without refactoring.
         if nze_enabled:
             verify_stats[f"count_m_after_{r}_filter"] += 1
             verify_stats[f"smooth_pass_{r}"] += 1
@@ -1399,7 +1399,9 @@ def main() -> None:
                     help="Write full artifacts (S-list + verify CSV) only for ω ≤ this value. "
                          "For ω above this threshold, run in summary-only mode to avoid huge files.")
     ap.add_argument("--nze_pruning", type=int, default=0,
-                    help="Enable NZE (no-zero-exponent / π-complete) pruning in the Pell inner loop for ω ≥ this threshold. When enabled, workers only emit candidates that already cover every prime in P_ω (no missing primes). 0 = disabled. For referee-grade full reporting, keep this at 0 or set it above --full_report_omega_max.")
+                    help="Enable NZE (no-zero-exponent / prime-complete) pruning in the Pell inner loop for ω ≥ this threshold." \
+                         + " When enabled, workers only emit candidates that already cover every prime in P_ω (no missing primes)." \
+                             + " 0 = disabled. For referee-grade full reporting, keep this at 0 or set it above --full_report_omega_max.")
     ap.add_argument("--workers", type=int, default=0)
     ap.add_argument("--chunk_masks", type=int, default=32)
     ap.add_argument("--striped", action="store_true")
