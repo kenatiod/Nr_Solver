@@ -4,15 +4,15 @@ Number theory research program by Ken Clements (Feb 2026).
 
 ## Overview
 
-`Nr_Solver.py` enumerates and verifies candidates for **π-complete products of consecutive integers**:
+`Nr_Solver.py` enumerates and verifies candidates for **prime-complete products of consecutive integers**:
 
 ```
 N_r(m) = m · (m+1) · ··· · (m+r-1)
 ```
 
-For a fixed prime set **P = {p₁, ..., pω}**, the program finds all m such that N_r(m) is P-smooth and **π-complete** — meaning the prime support of N_r(m) is exactly P (no missing primes, no extra primes).
+For a fixed prime set **P = {p₁, ..., pω}**, the program finds all m such that N_r(m) is P-smooth and **prime-complete** — meaning the prime support of N_r(m) is exactly P (no missing primes, no extra primes).
 
-The primary use case is r=2 (consecutive pairs m, m+1), which is the setting for investigating the conjecture that **n=633,555 gives the last π-complete product n(n+1)**.
+The primary use case is r=2 (consecutive pairs m, m+1), which is the setting for investigating the conjecture that **n=633,555 gives the last prime-complete product n(n+1)**.
 
 ## Mathematical Framework
 
@@ -24,12 +24,12 @@ Every pair (m, m+1) of P-smooth integers arises as `m = (x−1)/2` where (x, y) 
 x² − 2q·y² = 1
 ```
 
-for some squarefree q whose prime factors are all in P. The squarefree q values are encoded by bitmasks over P (all 2^ω masks are enumerated). For each mask, the Pell equation is solved via continued fractions in PARI/GP, and the resulting candidate m values are filtered for P-smoothness and π-completeness.
+for some squarefree q whose prime factors are all in P. The squarefree q values are encoded by bitmasks over P (all 2^ω masks are enumerated). For each mask, the Pell equation is solved via continued fractions in PARI/GP, and the resulting candidate m values are filtered for P-smoothness and prime-completeness.
 
 **Key quantities:**
 - **ω** — number of distinct prime divisors (size of prime set P)
 - **Pidx** — prime index of the greatest prime divisor of N_r(m)
-- **delta = Pidx − ω** — count of "missing" primes; zero iff π-complete
+- **delta = Pidx − ω** — count of "missing" primes; zero iff prime-complete
 - **L = max(3, (pmax+1)//2)** — Størmer-Lehmer iterate bound per Pell equation
 
 ## Algorithm
@@ -38,7 +38,7 @@ for some squarefree q whose prime factors are all in P. The squarefree q values 
 2. For each mask, solve x²−2qy²=1 in PARI/GP using continued fractions
 3. Generate up to L Pell iterates; each gives a candidate m = (x−1)/2
 4. Filter: m and m+1 must both be P-smooth
-5. Verify: prime support of m·(m+1) must equal P exactly (π-completeness)
+5. Verify: prime support of m·(m+1) must equal P exactly (prime-completeness)
 
 **Pruning options:**
 - `--max_m`: skip masks where `q > 2·max_m·(max_m+1)` (provably no solution ≤ max_m)
@@ -105,7 +105,7 @@ For each (r, ω), the program writes to `outdir/r_{r}/omega_{ω:02d}/`:
 | File | Description |
 |------|-------------|
 | `S_p{pmax}_r{r}_omega_{ω}.txt` | All candidate m values (P-smooth pairs) |
-| `verify_r{r}_omega_{ω}.csv` | Per-m factorizations and π-complete flag |
+| `verify_r{r}_omega_{ω}.csv` | Per-m factorizations and prime-complete flag |
 | `summary_r{r}_omega_{ω}.json` | Run metadata, SHA256 hashes, completeness flag |
 | `run_r{r}_omega_{ω}.log` | Progress log with timestamps |
 
@@ -121,7 +121,7 @@ Git tags mark each released version. This repository begins at **v16**, the firs
 
 ## Background
 
-The primorial `p_k#` is the product of the first k primes. The program searches for m such that m and m+1 together cover all primes up to pω — i.e., N₂(m) = m(m+1) is π-complete. The last known π-complete value is n=633,555:
+The primorial `p_k#` is the product of the first k primes. The program searches for m such that m and m+1 together cover all primes up to p_ω — i.e., N₂(m) = m(m+1) is prime-complete. The last known prime-complete value is n=633,555:
 
 ```
 633,555 = 3³ × 5 × 13 × 19²
