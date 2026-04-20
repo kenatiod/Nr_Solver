@@ -1,0 +1,27 @@
+2026-03-26T19:44:42+00:00 START r=5 omega=13 primes=[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41] workers=10 chunk_masks=32 striped=False incremental=True base_omega=12 max_mask_attempts=8 max_m=0 debug=False assertions=False
+2026-03-26T19:44:42+00:00 progress chunks_done=25/256 cum_tried=799 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:42+00:00 progress chunks_done=50/256 cum_tried=1599 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:42+00:00 progress chunks_done=75/256 cum_tried=2399 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:42+00:00 progress chunks_done=100/256 cum_tried=3199 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:43+00:00 progress chunks_done=125/256 cum_tried=3999 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:43+00:00 progress chunks_done=150/256 cum_tried=4799 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:44+00:00 progress chunks_done=175/256 cum_tried=5599 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:44+00:00 progress chunks_done=200/256 cum_tried=6399 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:45+00:00 progress chunks_done=225/256 cum_tried=7199 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:47+00:00 progress chunks_done=241/256 cum_tried=7711 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:47+00:00 progress chunks_done=242/256 cum_tried=7743 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:47+00:00 progress chunks_done=243/256 cum_tried=7775 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:47+00:00 progress chunks_done=244/256 cum_tried=7807 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:47+00:00 progress chunks_done=245/256 cum_tried=7839 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:47+00:00 progress chunks_done=246/256 cum_tried=7871 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:47+00:00 progress chunks_done=247/256 cum_tried=7903 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:47+00:00 progress chunks_done=248/256 cum_tried=7935 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:48+00:00 progress chunks_done=249/256 cum_tried=7967 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:48+00:00 progress chunks_done=250/256 cum_tried=7999 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:48+00:00 progress chunks_done=251/256 cum_tried=8031 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:48+00:00 progress chunks_done=252/256 cum_tried=8063 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:49+00:00 progress chunks_done=253/256 cum_tried=8095 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:49+00:00 progress chunks_done=254/256 cum_tried=8127 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:49+00:00 progress chunks_done=255/256 cum_tried=8159 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:52+00:00 progress chunks_done=256/256 cum_tried=8191 cum_failed=0 unique_failed_masks=0 unprocessed=0 q_skipped=0 x1_skipped=0 gp_bailout=0 iter_breaks=0 nze_skipped=0
+2026-03-26T19:44:52+00:00 DONE r=5 omega=13 |S_raw|=47 |S_5|=47 pi_hits=0 unprocessed_masks=0 runtime_sec=10.468
