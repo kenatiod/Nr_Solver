@@ -94,7 +94,7 @@ The CRT combines all these conditions into a minimum valid index, $\lambda$. If 
 the entire Pell family is eliminated — no candidate n exists within the range that 
 Størmer's theorem allows, and that family is dead. Crucially, one need never compute 
 the actual value of $n$ at index $\lambda$, which would be astronomically large. Just 
-compute the entry periods, take their $LCM$, compare to $L$, and one line of arithmetic 
+compute the entry periods, take their LCM, compare to $L$, and one line of arithmetic 
 settles the question.
 
 What makes this devastating as $\omega$ grows is that each additional missing prime 
@@ -108,8 +108,13 @@ zero prime-complete pairs in each case.
 
 For $\omega > 17$, the CRT argument becomes self-contained and requires no Pell computation at all. 
 The number of missing primes is large enough that $\lambda$ exceeds $L$ for every possible mask 
-family by pure arithmetic, independent of any search. The computational phase establishes the base; 
-the CRT closes off all remaining cases analytically. Together they imply that the list of 
-prime-complete products of consecutive integers — the sequence A141399 is provably finite, 
-with $m = 633{,}555$ constituting its largest member.
+family by pure arithmetic, independent of any search. If prime-complete solutions are absent for 
+consecutive orders $r,\ldots,R-1$, then any solution at order $R$ must satisfy simultaneous entry 
+conditions for all missing primes $p_r,\ldots,p_R$. The combined CRT/LCM entry modulus grows 
+faster than the admissible Størmer-Lehmer search bound, so after a finite base range, 
+no catch-up solution is possible.
+
+The computational phase establishes the base; the CRT closes off all remaining cases analytically. 
+Together they imply that the list of prime-complete products of consecutive integers — the 
+sequence A141399 is provably finite, with $m = 633{,}555$ constituting its largest member.
 
