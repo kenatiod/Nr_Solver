@@ -11,7 +11,7 @@ Enumerate and verify candidates for prime-complete products of consecutive integ
 
 under the Størmer-Lehmer S-unit framework.
 
-High-level idea (r=2)
+High-level idea (runlength, r=2 for m(m+1))
 ---------------------
 For a fixed prime set P = {p1,...,p_ω}, we enumerate all m such that m and m+1
 are P-smooth. Each such m arises from a Pell-type equation:
@@ -55,12 +55,12 @@ How to install / run (macOS example)
 ------------------------------------
 1) Install PARI/GP (Homebrew):
        brew install pari
-2) Run a sweep (r=2, ω=8..20), full enumeration:
-       python3 Nr_Solver.py --outdir audit_runs --k 2 \
+2) Run a sweep (m(m+1), ω=8..20), full enumeration:
+       python3 Nr_Solver.py --outdir audit_runs --runlength 2 \
          --start_omega 8 --end_omega 20 --workers 10 --chunk_masks 16 \
          --gp_path /opt/homebrew/bin/gp --assertions
-3) Run high-omega sweep with early rejection (vastly faster for ω≥17):
-       python3 Nr_Solver.py --outdir audit_runs --k 2 \
+3) Run high-omega sweep with early rejection on m(m+1) (vastly faster for ω≥17):
+       python3 Nr_Solver.py --outdir audit_runs --runlength 2 \
          --start_omega 17 --end_omega 30 --workers 10 --chunk_masks 16 \
          --max_m 10000000000000000000000000 \
          --gp_path /opt/homebrew/bin/gp --assertions
@@ -1392,7 +1392,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument('--version', action='store_true', help='Print version/environment info and exit')
     ap.add_argument("--outdir", default=f"{program_name}_v{program_version}_audit_runs")
-    ap.add_argument("--r", type=int, default=2, choices=[2, 3, 4, 5])
+    ap.add_argument("--runlength", type=int, default=2, choices=[2, 3, 4, 5])
     ap.add_argument("--start_omega", type=int, default=8)
     ap.add_argument("--end_omega", type=int, default=20)
     ap.add_argument("--full_report_omega_max", type=int, default=20,
@@ -1436,7 +1436,7 @@ def main() -> None:
     ENV = env_block(args.gp_path, __file__, sys.argv)
 
     outdir = args.outdir
-    r = args.r
+    r = args.runlength
     ensure_dir(os.path.join(outdir, f"r_{r}"))
 
     workers = args.workers if args.workers and args.workers > 0 else (os.cpu_count() or 1)
@@ -1451,7 +1451,7 @@ def main() -> None:
 
     print(f"[+] Using gp-based Pell: YES (pellxy defined; no bnfnorm)")
     print(f"[+] outdir: {outdir}")
-    print(f"[+] r={r} omega range: {args.start_omega}..{args.end_omega}")
+    print(f"[+] runlength={r} count of multipliers: {2}..{5}")
     print(f"[+] full_report_omega_max={args.full_report_omega_max} (summary-only for ω above this)")
     print(f"[+] workers={workers} chunk_masks={args.chunk_masks} striped={args.striped}")
     print(f"[+] incremental={not args.no_incremental} gp_path={args.gp_path}")
@@ -1608,7 +1608,7 @@ def main() -> None:
                       f"unprocessed={len(unprocessed)} runtime={runtime/60:.2f} min")
             except Exception as e:
                 end_utc = utc_now_iso()
-                logf.write(f"{end_utc} ERROR r={r} omega={omega} error={repr(e)}\n")
+                logf.write(f"{end_utc} ERROR runlength={r} omega={omega} error={repr(e)}\n")
                 logf.flush()
                 print(f"[!] ERROR omega={omega}: {e!r} (see {log_path})")
 
