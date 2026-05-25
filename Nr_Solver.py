@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Nr_Solver.py version 17
+# Nr_Solver.py version 18
 """
 Lehmer-Størmer enumerator by PARI Pell equation solver
 
@@ -62,14 +62,15 @@ How to install / run (macOS example)
 3) Run high-omega sweep with early rejection on m(m+1) (vastly faster for ω≥17):
        python3 Nr_Solver.py --outdir audit_runs --runlength 2 \
          --start_omega 17 --end_omega 30 --workers 10 --chunk_masks 16 \
-         --max_m 10000000000000000000000000 \
+         --max_m_expo 25 \
          --gp_path /opt/homebrew/bin/gp --assertions
 
 Use --version to print a machine-readable environment/version block.
 
-Version 10 changes (Feb 20 2026)
+Version 10 changes (Feb 20, 2026)
 ---------------------------------
-* Added --max_m for provably correct early rejection:
+* Added --max_m_expo (exponent of 10) for provably correct early rejection:
+  - --max_m_expo 25 sets max_m to 10^25
   - q-bound pre-filter: skips GP call when q > 2*max_m*(max_m+1)
   - GP-side bailout: continued fraction aborts when convergent p > 2*max_m+1
   - Fundamental solution gate: skips iterate loop when x1 > 2*max_m+1
@@ -82,7 +83,7 @@ Version 10 changes (Feb 20 2026)
 * Handshake self-test now verifies both solution correctness and bailout behavior
 
 
-Version 17 changes (Feb 27 2026)
+Version 17 changes (Feb 27, 2026)
 ---------------------------------
 * Corrected iterate bound: L = max(3, pmax) instead of max(3, (pmax+1)//2).
   The Størmer-Lehmer theorem (via the primitive divisor theorem of
@@ -91,6 +92,12 @@ Version 17 changes (Feb 27 2026)
   The prior half-pmax bound was conservative in the wrong direction —
   it was too small to guarantee completeness. This fix closes the gap
   between the computational search and a formally complete enumeration.
+
+Version 17 changes (May 25, 2026)  
+---------------------------------
+* Changed --max_m to --max_m_expo to take the exponent of 10 for max_m
+  instead of a 1 followed by a long string of zeros.
+
 
 By Ken Clements, Feb 16 2026
 """
@@ -121,7 +128,7 @@ from multiprocessing import get_context
 from typing import Dict, List, Optional, Set, Tuple
 
 
-program_name, program_version = "Nr_Solver", 16
+program_name, program_version = "Nr_Solver", 18
 
 
 # ----------------------------- switches (set by args) -----------------------------
@@ -1410,11 +1417,12 @@ def main() -> None:
     ap.add_argument("--max_mask_attempts", type=int, default=8)
     ap.add_argument("--mask_requeue_batch", type=int, default=64)
     ap.add_argument("--gp_timeout", type=float, default=0.0)
-    ap.add_argument("--max_m", type=int, default=0,
-                    help="Upper bound on m for early rejection. "
+    ap.add_argument("--max_m_expo", type=int, default=0,
+                    help="Exponent of 10 for upper bound on m for early rejection. "
                          "Masks where q > 2*max_m*(max_m+1) are skipped (no GP call). "
                          "Iterate loops break when m > max_m. "
                          "0 = disabled (full enumeration, no skipping). "
+                         "Set --max_m_expo 25 for max_m at 10^25."
                          "When set, the enumeration is provably complete up to max_m: "
                          "from x^2 - 2qy^2 = 1 with y >= 1, x >= sqrt(2q+1), "
                          "so m = (x-1)/2 >= (sqrt(2q+1)-1)/2 > max_m when q > 2*max_m*(max_m+1).")
@@ -1455,7 +1463,7 @@ def main() -> None:
     print(f"[+] full_report_omega_max={args.full_report_omega_max} (summary-only for ω above this)")
     print(f"[+] workers={workers} chunk_masks={args.chunk_masks} striped={args.striped}")
     print(f"[+] incremental={not args.no_incremental} gp_path={args.gp_path}")
-    print(f"[+] max_m={args.max_m}" + (" (early rejection enabled)" if args.max_m > 0 else " (disabled, full enumeration)"))
+    print(f"[+] max_m=10^{args.max_m_expo}" + (" (early rejection enabled)" if args.max_m_expo > 0 else " (disabled, full enumeration)"))
     print(f"[+] debug={DEBUG} assertions={ASSERTIONS}")
     print(f"[+] start time (UTC): {utc_now_iso()}\n")
 
@@ -1498,7 +1506,7 @@ def main() -> None:
                 f"{start_utc} START r={r} omega={omega} primes={primes} workers={workers} "
                 f"chunk_masks={args.chunk_masks} striped={args.striped} "
                 f"incremental={not args.no_incremental} base_omega={base_omega} "
-                f"max_mask_attempts={args.max_mask_attempts} max_m={args.max_m} "
+                f"max_mask_attempts={args.max_mask_attempts} max_m_expo={args.max_m_expo} "
                 f"debug={DEBUG} assertions={ASSERTIONS}\n"
             )
             logf.flush()
@@ -1521,7 +1529,7 @@ def main() -> None:
                         max_mask_attempts=args.max_mask_attempts,
                         mask_requeue_batch=args.mask_requeue_batch,
                         gp_timeout=args.gp_timeout,
-                        max_m=args.max_m,
+                        max_m= 0 if args.max_m_expo == 0 else 10**args.max_m_expo,
                     )
 
                     Ptuple = tuple(primes)
@@ -1544,7 +1552,7 @@ def main() -> None:
                         max_mask_attempts=args.max_mask_attempts,
                         mask_requeue_batch=args.mask_requeue_batch,
                         gp_timeout=args.gp_timeout,
-                        max_m=args.max_m,
+                        max_m= 0 if args.max_m_expo == 0 else 10**args.max_m_expo,
                     )
                     S_list = []
                     S_r = []
