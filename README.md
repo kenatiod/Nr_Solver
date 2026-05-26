@@ -13,8 +13,8 @@ N_r(m) = m · (m+1) · ··· · (m+r-1)
 For a fixed prime set **P = {p₁, ..., pω}**, the program finds all m such that N_r(m) is P-smooth and **prime-complete** — 
 meaning the prime support of N_r(m) is exactly P (no missing primes, no extra primes).
 
-The primary use case is r=2 (consecutive pairs m, m+1), which is the setting for investigating the conjecture 
-that **n=633,555 gives the last prime-complete product n(n+1)**.
+The primary use case is runlength=2 (consecutive pairs m, m+1), which is the setting for investigating the conjecture 
+that **n=633,555 gives the last prime-complete product m(m+1)**.
 
 ## Mathematical Framework
 
@@ -32,8 +32,8 @@ fractions in PARI/GP, and the resulting candidate m values are filtered for P-sm
 
 **Key quantities:**
 - **ω** — number of distinct prime divisors (size of prime set P)
-- **Pidx** — prime index of the greatest prime divisor of N_r(m)
-- **delta = Pidx − ω** — count of "missing" primes; zero iff prime-complete
+- **iota** — prime index of the greatest prime divisor of N_r(m)
+- **delta = iota − ω** — count of "missing" primes; zero iff prime-complete
 - **L = max(3, (pmax+1)//2)** — Størmer-Lehmer iterate bound per Pell equation
 
 ## Algorithm
@@ -79,13 +79,13 @@ python3 Nr_Solver.py [options]
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `--r` | 2 | Consecutive integer count (2=pairs, 3=triples, ...) |
+| `--runlength` | 2 | Consecutive integer count (2=pairs, 3=triples, 4, 5) |
 | `--start_omega` | 8 | First ω to process |
 | `--end_omega` | 20 | Last ω to process |
 | `--workers` | cpu_count | Parallel worker processes |
 | `--outdir` | auto | Output directory |
-| `--max_m` | 0 (disabled) | Upper bound for provably complete enumeration |
-| `--nze_pruning` | 0 (disabled) | Enable π-complete-only filter at ω ≥ this value |
+| `--max_m_expo` | 0 (disabled) | 10^expo upper bound for provably complete enumeration |
+| `--nze_pruning` | 0 (disabled) | Enable prime-complete-only filter at ω ≥ this value |
 | `--full_report_omega_max` | 20 | Write full S-file + verify CSV only for ω ≤ this |
 | `--no_incremental` | off | Disable incremental mode (always recompute) |
 | `--gp_path` | gp | Path to PARI/GP binary |
@@ -96,15 +96,15 @@ python3 Nr_Solver.py [options]
 python3 Nr_Solver.py --start_omega 8 --end_omega 20 --workers 10
 ```
 
-**Example — bounded enumeration (provably complete up to max_m):**
+**Example — bounded enumeration (provably complete up to 10^max_m_expo):**
 
 ```bash
-python3 Nr_Solver.py --start_omega 8 --end_omega 20 --max_m 1000000 --workers 10
+python3 Nr_Solver.py --start_omega 8 --end_omega 20 --max_m_expo 30 --workers 10
 ```
 
 ## Output
 
-For each (r, ω), the program writes to `outdir/r_{r}/omega_{ω:02d}/`:
+For r = runlength, each (r, ω), the program writes to `outdir/r_{r}/omega_{ω:02d}/`:
 
 | File | Description |
 |------|-------------|
@@ -117,7 +117,7 @@ For each (r, ω), the program writes to `outdir/r_{r}/omega_{ω:02d}/`:
 
 Git tags mark each released version. This repository begins at **v16**, the first version with:
 - Full audit trail (SHA256, environment block, completeness flags)
-- Provably correct `--max_m` early rejection
+- Provably correct `--max_m_expo` early rejection
 - NZE pruning option
 - Incremental (ω → ω+1) enumeration mode
 - Multiprocessing with retry/requeue for failed masks
@@ -133,7 +133,7 @@ that m and m+1 together cover all primes up to p_ω — i.e., N₂(m) = m(m+1) i
 633,556 = 2² × 7 × 11³ × 17
 ```
 
-Prime support = {2, 3, 5, 7, 11, 13, 17, 19} = P₈, omega=8, Pidx=8, delta=0.
+Prime support = {2, 3, 5, 7, 11, 13, 17, 19} = P₈, omega=8, iota=8, delta=0.
 
 ## License
 
